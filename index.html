@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    /* General Styling */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #f0f2f5, #6ea8fe);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }    
+    .login-container,
+    .main-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-container {
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .login-container input {
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    .login-container button {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    .login-container button:hover {
+      background-color: #0056b3;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .add-section {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+      max-width: 250px;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .login-container button {
+  background-color: #007bff;
+  color: white;
+  padding: 6px 12px; /* Smaller padding */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem; /* Smaller font size */
+  width: auto; /* Auto width to fit content */
+}
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .add-button {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .change-heading {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    #todoList {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9f9f9;
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 5px;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .todo-item.completed span {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .todo-item button {
+      padding: 5px 10px;
+      border-radius: 3px;
+    }
+
+    .todo-item .edit {
+      background: #ffc107;
+      color: white;
+    }
+
+    .todo-item .remove {
+      background: #dc3545;
+      color: white;
+    }
+
+    .todo-item .complete {
+      background: #28a745;
+      color: white;
+    }
+
+    .progress {
+      margin-top: 20px;
+      background: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 20px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #007bff;
+      transition: width 0.3s;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container" id="loginScreen">
+    <h1>Welcome Back!</h1>
+    <input type="text" id="username" placeholder="Enter your username (e.g., user123)" required style="background-color: #f8f9fa;" />
+    <input type="password" id="password" placeholder="Enter your password" required style="background-color: #f8f9fa;" />
+    <button id="loginButton">Login</button>
+  </div>
+
+  <div class="main-container" id="mainScreen" style="display: none;">
+    <div class="container">
+      <h1 id="heading">Enhanced To-Do List</h1>
+
+      <div class="add-section">
+        <input type="text" id="todoInput" placeholder="What do you need to do?" />
+        <button id="addButton" class="add-button">Add Task</button>
+        <button id="changeHeading" class="change-heading">Change Heading</button>
+      </div>
+
+      <ul id="todoList"></ul>
+
+      <div class="progress">
+        <div id="progressBar" class="progress-bar" style="width: 0%;"></div>
+      </div>
+
+      <footer>
+        <p>Created By Mihir</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const validUsername = "Mihirponkshe"; // Replace with actual username
+    const validPassword = "Mihir2701"; // Replace with actual password
+
+    const loginScreen = document.getElementById("loginScreen");
+    const mainScreen = document.getElementById("mainScreen");
+    const loginButton = document.getElementById("loginButton");
+
+    loginButton.addEventListener("click", function () {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      // Simple authentication check
+      if (username === validUsername && password === validPassword) {
+        loginScreen.style.display = "none";
+        mainScreen.style.display = "flex";
+      } else {
+        alert("Invalid username or password!");
+      }
+    });
+
+    // To-Do List Functionality
+    const todoInput = document.getElementById('todoInput');
+    const addButton = document.getElementById('addButton');
+    const changeHeading = document.getElementById('changeHeading');
+    const todoList = document.getElementById('todoList');
+    const heading = document.getElementById('heading');
+    const progressBar = document.getElementById('progressBar');
+
+    function updateProgressBar() {
+      const totalTasks = todoList.children.length;
+      const completedTasks = document.querySelectorAll('.todo-item.completed').length;
+      const progress = totalTasks === 0 ? 0 : (completedTasks / totalTasks) * 100;
+      progressBar.style.width = progress + '%';
+    }
+
+    addButton.addEventListener('click', function () {
+      const taskText = todoInput.value.trim();
+      if (taskText === '') {
+        alert('Please enter a task!');
+        return;
+      }
+
+      const listItem = document.createElement('li');
+      listItem.classList.add('todo-item');
+
+      const taskContent = document.createElement('span');
+      taskContent.textContent = taskText;
+
+      const completeButton = document.createElement('button');
+      completeButton.textContent = 'Complete';
+      completeButton.classList.add('complete');
+      completeButton.addEventListener('click', function () {
+        listItem.classList.toggle('completed');
+        updateProgressBar();
+      });
+
+      const editButton = document.createElement('button');
+      editButton.textContent = 'Edit';
+      editButton.classList.add('edit');
+      editButton.addEventListener('click', function () {
+        const newTaskText = prompt('Edit your task:', taskContent.textContent);
+        if (newTaskText !== null && newTaskText.trim() !== '') {
+          taskContent.textContent = newTaskText;
+        }
+      });
+
+      const removeButton = document.createElement('button');
+      removeButton.textContent = 'Remove';
+      removeButton.classList.add('remove');
+      removeButton.addEventListener('click', function () {
+        todoList.removeChild(listItem);
+        updateProgressBar();
+      });
+
+      listItem.appendChild(taskContent);
+      listItem.appendChild(completeButton);
+      listItem.appendChild(editButton);
+      listItem.appendChild(removeButton);
+      todoList.appendChild(listItem);
+
+      todoInput.value = '';
+      updateProgressBar();
+    });
+
+    changeHeading.addEventListener('click', function () {
+      heading.textContent = 'Your Enhanced To-Do List!';
+    });
+  </script>
+</body>
+</html>
